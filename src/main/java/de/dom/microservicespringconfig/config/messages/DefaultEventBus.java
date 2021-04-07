@@ -2,12 +2,13 @@ package de.dom.microservicespringconfig.config.messages;
 
 import de.dom.microservice.arch.eventsourcing.aggregates.AggregateProxy;
 import de.dom.microservice.arch.eventsourcing.bus.EventBus;
+import de.dom.microservice.arch.eventsourcing.bus.EventBusMessage;
+import de.dom.microservice.arch.eventsourcing.bus.EventBusResult;
 import de.dom.microservice.arch.eventsourcing.event.AbstractDomainEvent;
 import de.dom.microservice.arch.eventsourcing.eventstore.EventStoreEntity;
 import de.dom.microservice.arch.eventsourcing.eventstore.EventStoreInterface;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,19 +22,20 @@ public class DefaultEventBus implements EventBus {
     }
 
     @Override
-    public Set<AbstractDomainEvent> read(String key, Class<?> aggregate) {
+    public EventBusResult read(String key, Class<?> aggregate) {
         List<EventStoreEntity> entities = eventStoreInterface.aggregate(key, aggregate);
-        AggregateProxy<?> proxy = new AggregateProxy<>(aggregate);
-        Set<AbstractDomainEvent> sets = new HashSet<>();
+        AggregateProxy proxy = new AggregateProxy(aggregate);
+        List<AbstractDomainEvent> sets = new ArrayList<>();
             sets.addAll(proxy.convertAggregateEvents(entities));
-       return sets;
+       EventBusResult r = new EventBusResult( sets );
+
+       return r;
     }
 
     @Override
-    public void apply(String key, Class<?> aggregate, AbstractDomainEvent event) {
-        long sequence = eventStoreInterface.sequence(event.getReference(), aggregate);
-        EventStoreEntity from = EventStoreEntity.from(aggregate, event, sequence);
-        eventStoreInterface.save(from);
+    public void apply(EventBusMessage eventBusMessage) {
+
     }
+
 
 }

@@ -11,8 +11,8 @@ public class CreateNewList extends AbstractDomainCommand {
     private String name;
 
     @Override
-    public String setReference(String reference) {
-        return this.reference = reference;
+    public void setReference(String reference) {
+         this.reference = reference;
     }
 
     @Override

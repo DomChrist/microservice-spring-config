@@ -39,13 +39,7 @@ public class SpringEventSourcingConfig extends EventSourcingConfig {
         logger.info("--- EventSourcingConfig ----");
     }
 
-    @Override
-    public AggregateLifecycle lifecycle() {
-        logger.info("lifecycle");
-        return null;
-    }
 
-    /*
     @Bean
     public JdbcTemplate template( @Autowired DataSource source ){
         return new JdbcTemplate(source);
@@ -81,11 +75,8 @@ public class SpringEventSourcingConfig extends EventSourcingConfig {
             aware.setLifecycle(al);
             EventSourcingScope.aggregateLifecycle = al;
             EventSourcingScope.eventBus = eventBus;
-            CommandGatewayScope.setCommandGateway(gateway);
-            CommandGatewayScope.setQueryGateway(queryGateway);
         logger.info("--- EventSourcingConfig ----");
         return aware;
     }
-    */
 
 }
